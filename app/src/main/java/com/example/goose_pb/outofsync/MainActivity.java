@@ -1,5 +1,8 @@
 package com.example.goose_pb.outofsync;
 
+import android.accessibilityservice.AccessibilityService;
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -7,9 +10,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -85,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        @Override
+
         protected void onPostExecute(String s) {
 
             // pass result that was received from doInBackground() into the Parser
@@ -125,9 +131,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             NSync syncup = new NSync();
 //            //link for live data
-//            syncup.execute("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
+            syncup.execute("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
             //link for static data so i can add images
-            syncup.execute("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
+//            syncup.execute("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
 
             nsyncs.add(syncup);
         }
@@ -147,6 +153,20 @@ public class MainActivity extends AppCompatActivity {
         NSync syncup = new NSync();
         syncup.execute(uri);
     }
+    public View getView (int Position, View convertView, ViewGroup parent) {
+        Context context = null;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.single_train, parent, false);
 
+        int position = 0;
+        Trains trains = trainList.get(position);
 
+        TextView tv = (TextView) view.findViewById(R.id.trainText);
+        tv.setText(trains.getTrainStatus());
+
+        ImageView iv = (ImageView) findViewById(R.id.trainImage);
+        iv.setImageBitmap(trains.getBitmap());
+
+    return view;
+    }
 }

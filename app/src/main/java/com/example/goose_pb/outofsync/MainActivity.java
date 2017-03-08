@@ -2,11 +2,13 @@ package com.example.goose_pb.outofsync;
 
 import android.accessibilityservice.AccessibilityService;
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
@@ -27,7 +29,7 @@ import com.example.goose_pb.outofsync.model.Trains;
 import com.example.goose_pb.outofsync.parser.TrainsXMLParser;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ListActivity {
     TextView do_task;
     ProgressBar pb;
     List<NSync> nsyncs;
@@ -41,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        FloatingActionButton fab = (FloatingActionButton) findViewById();
 
         pb = (ProgressBar) findViewById(R.id.pb);
         pb.setVisibility(View.INVISIBLE);
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
+//        @Override
         protected void onPostExecute(String s) {
 
             // pass result that was received from doInBackground() into the Parser
@@ -142,31 +145,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void updateDisplay(){
-        // Loop through the trainList displaying the name of each flower.
-        if (trainList != null){
-            for (Trains train : trainList) {
-                do_task.append(train.getPubMsg() +"\n");
-            }
-        }
+//        // Loop through the trainList displaying the name of each flower.
+//        if (trainList != null){
+//            for (Trains train : trainList) {
+//                do_task.append(train.getPubMsg() +"\n");
+//            }
+//        }
+        TrainAdapter adapter = new TrainAdapter(this, R.layout.single_train, trainList);
+        setListAdapter(adapter);
     }
     private void requestData(String uri) {
         NSync syncup = new NSync();
         syncup.execute(uri);
     }
-    public View getView (int Position, View convertView, ViewGroup parent) {
-        Context context = null;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.single_train, parent, false);
-
-        int position = 0;
-        Trains trains = trainList.get(position);
-
-        TextView tv = (TextView) view.findViewById(R.id.trainText);
-        tv.setText(trains.getTrainStatus());
-
-        ImageView iv = (ImageView) findViewById(R.id.trainImage);
-        iv.setImageBitmap(trains.getBitmap());
-
-    return view;
-    }
+//    public View getView (int Position, View convertView, ViewGroup parent) {
+//        Context context = null;
+//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+//        View view = inflater.inflate(R.layout.single_train, parent, false);
+//
+//        int position = 0;
+//        Trains trains = trainList.get(position);
+//
+//        TextView tv = (TextView) view.findViewById(R.id.trainText);
+//        tv.setText(trains.getTrainStatus());
+//
+//        ImageView iv = (ImageView) findViewById(R.id.trainImage);
+//        iv.setImageBitmap(trains.getBitmap());
+//
+//    return view;
+//    }
 }

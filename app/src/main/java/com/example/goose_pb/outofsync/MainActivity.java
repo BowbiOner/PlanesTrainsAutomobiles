@@ -6,6 +6,8 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -43,29 +45,53 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 //        FloatingActionButton fab = (FloatingActionButton) findViewById();
 
         pb = (ProgressBar) findViewById(R.id.pb);
         pb.setVisibility(View.INVISIBLE);
 
-
-        do_task = (TextView) findViewById(R.id.do_task);
-        do_task.setMovementMethod(new ScrollingMovementMethod());
+//
+//        do_task = (TextView) findViewById(R.id.do_task);
+//        do_task.setMovementMethod(new ScrollingMovementMethod());
 
         nsyncs = new ArrayList<>();
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    private void requestData(String uri){
+        NSync nSync = new NSync();
+        nSync.execute(uri);
+    }
+
+    protected boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public class NSync extends AsyncTask<String, String, List<Trains>>{
 
         @Override
         protected void onPreExecute(){
-            updateDisplay();
-            if(nsyncs.size() == 1) {
+//            updateDisplay();
+            if(nsyncs.size() == 0) {
                 pb.setVisibility(View.VISIBLE);
             }
+            nsyncs.add(this);
         }
         @Override
         protected List<Trains> doInBackground(String... params) {
@@ -117,13 +143,6 @@ public class MainActivity extends ListActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -154,10 +173,7 @@ public class MainActivity extends ListActivity {
         TrainAdapter adapter = new TrainAdapter(this, R.layout.single_train, trainList);
         setListAdapter(adapter);
     }
-    private void requestData(String uri) {
-        NSync syncup = new NSync();
-        syncup.execute(uri);
-    }
+
 //    public View getView (int Position, View convertView, ViewGroup parent) {
 //        Context context = null;
 //        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);

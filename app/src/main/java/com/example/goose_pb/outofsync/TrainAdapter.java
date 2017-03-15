@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.goose_pb.outofsync.model.Trains;
@@ -32,6 +33,9 @@ public class TrainAdapter extends ArrayAdapter<Trains> {
 
         TextView tv = (TextView) view.findViewById(R.id.trainText);
         tv.setText(trains.getPubMsg());
+
+        ImageView iv = (ImageView) view.findViewById(R.id.trainImage);
+        iv.setImageBitmap(trains.getBitmap());
 
         return view;
     }

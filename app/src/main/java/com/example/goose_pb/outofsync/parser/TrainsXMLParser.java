@@ -76,8 +76,12 @@ public class TrainsXMLParser {
                                     break;
                                 case "PublicMessage" :
                                     train.setPubMsg(parser.getText());
+                                    break;
                                 case "Direction" :
                                     train.setDirectionD(parser.getText());
+                                    break;
+                                case "Photo" :
+                                    train.setTrainImg(parser.getText());
                                 default:
                                     break;
                             }

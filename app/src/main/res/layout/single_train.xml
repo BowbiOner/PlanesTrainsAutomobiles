@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <ImageView
         android:id="@+id/trainImage"
         android:layout_width="80dp"
@@ -24,5 +23,4 @@
         android:text="@string/train_station_name"
         android:textAppearance="?android:attr/textAppearanceLarge"
         />
-
 </RelativeLayout>

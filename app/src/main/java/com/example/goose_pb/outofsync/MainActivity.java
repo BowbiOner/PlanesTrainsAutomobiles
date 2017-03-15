@@ -45,19 +45,23 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //create an instance of the toolbaer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        FloatingActionButton fab = (FloatingActionButton) findViewById();
-
+        //set the visibility of the above toolbar to visible
+        toolbar.setVisibility(View.VISIBLE);
+        //setSupportActionBar(toolbar);
+        //create a progress bar and get it by the id defined in the conent_main.xml
         pb = (ProgressBar) findViewById(R.id.pb);
-        pb.setVisibility(View.INVISIBLE);
+        //set the visiblity of the progress bar to being visible
+        pb.setVisibility(View.VISIBLE);
 
-//
-//        do_task = (TextView) findViewById(R.id.do_task);
-//        do_task.setMovementMethod(new ScrollingMovementMethod());
-
+        // This array list of tasks allows for control over parallel tasks
+        // you know when there are tasks still left to do
+        // the application will add and remove AsyncTasks from this list
         nsyncs = new ArrayList<>();
 
+//        requestData("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
+        requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
 
     }
 
@@ -73,6 +77,12 @@ public class MainActivity extends ListActivity {
         nSync.execute(uri);
     }
 
+    public void getData(View v) {
+//        requestData("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
+        requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
+    }
+
+    //function to check to see if the device has a valid internet connection
     protected boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -99,10 +109,11 @@ public class MainActivity extends ListActivity {
             // ask the HttpManager to go to this uri and get the data
             // getData should return a string of XML (the URI above request xml)
             String content = HttpManager.getData(params[0]);
+//            return content;
             trainList = TrainsXMLParser.parseFeed(content);
-
-            //loop through each train object do a network reuqest for each image
-            //store each of the phots in a bitmap var in the train obeject
+//            return content;
+//            loop through each train object do a network reuqest for each image
+//            store each of the phots in a bitmap var in the train obeject
             for (Trains train : trainList){
                 try{
                     String imgUrl = PHOTOS_BASE_URL + train.getTrainImg();
@@ -114,6 +125,7 @@ public class MainActivity extends ListActivity {
                     e.printStackTrace();
                 }
             }
+
             //now we return the trainlist not just content, so the whole array of objects
             return trainList;
 
@@ -121,10 +133,10 @@ public class MainActivity extends ListActivity {
 
 
 //        @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(List<Trains> train) {
 
             // pass result that was received from doInBackground() into the Parser
-            trainList = TrainsXMLParser.parseFeed(s);
+        //    trainList = TrainsXMLParser.parseFeed(s);
             updateDisplay();
             nsyncs.remove(this);
             if(nsyncs.isEmpty()) {
@@ -134,7 +146,7 @@ public class MainActivity extends ListActivity {
 
         @Override
         protected void onProgressUpdate(String... values){
-            super.onProgressUpdate();
+//            super.onProgressUpdate();
 //            for(int i = 0; i < 3; i++){
 //                updateDisplay("We are working with : " + values[i]);
 //            }
@@ -151,17 +163,20 @@ public class MainActivity extends ListActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            NSync syncup = new NSync();
-//            //link for live data
-            syncup.execute("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
-            //link for static data so i can add images
-//            syncup.execute("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
-
-            nsyncs.add(syncup);
+//            NSync syncup = new NSync();
+////            //link for live data
+//            syncup.execute("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
+//            //link for static data so i can add images
+////            syncup.execute("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
+//
+//            nsyncs.add(syncup);
+//            requestData("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
+            requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
         }
 
         return false;
     }
+
 
     protected void updateDisplay(){
 //        // Loop through the trainList displaying the name of each flower.

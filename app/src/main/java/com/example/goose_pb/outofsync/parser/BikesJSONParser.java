@@ -1,6 +1,10 @@
-package com.example.goose_pb.outofsync;
+package com.example.goose_pb.outofsync.parser;
 
+import android.provider.Settings;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
+
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -11,61 +15,23 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
 /**
- * Created by goose_pb on 08/02/2017.
+ * Created by ultra on 20-Mar-17.
  */
 
-public class HttpManager {
+public class BikesJSONParser {
+    //varibles for JSONParser
+    static InputStream is = null;
+    static JSONObject jObj = null;
+    //default constructor
+    public BikesJSONParser(){
 
-    public static String getData(String uri){
-        //import the buffered reader class and instatiate and object of it "reader" to null
-        BufferedReader reader = null;
-
-        try {
-            //import the java url class, create a url object called "url" and the url we will accept is uri
-            URL url = new URL(uri);
-
-            //open up said connection above using the HTTPURLCONNECTION
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            StringBuilder sb = new StringBuilder();
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line;
-
-            //while there is still data left to read the reader will continue to write to the input stream
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + " \n");
-            }
-
-            //now convert the stringbuilder to a string then return it to the Main Activity
-            return sb.toString();
-
-        } catch (Exception e) {
-            //if there is a poor url print the stack trace and return nothing
-            e.printStackTrace();
-            return null;
-        }
-
-
-        finally {
-            if (reader != null) {
-                try {
-                    //close the reader
-                    reader.close();
-                } catch (IOException e) {
-                    //if there is a i/o exception then print the stack trace and retun nothing
-                    e.printStackTrace();
-                    return null;
-                }
-
-            }
-        }
     }
-
+    //fucntion to actually recieve the JSON from a URL
     public String callApi(String reqURL){
         String res = null;
         try {
@@ -110,4 +76,3 @@ public class HttpManager {
         }
     }
 }
-

@@ -1,7 +1,5 @@
 package com.example.goose_pb.outofsync;
 
-import android.accessibilityservice.AccessibilityService;
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,35 +8,20 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.HttpAuthHandler;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import com.example.goose_pb.outofsync.model.Trains;
 import com.example.goose_pb.outofsync.parser.TrainsXMLParser;
-import com.example.goose_pb.outofsync.parser.BikesJSONParser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class MainActivity extends ListActivity {
@@ -48,8 +31,6 @@ public class MainActivity extends ListActivity {
     List<NSync> nsyncs;
     // We will now retrieve a list of Flowers rather than raw XML
     List<Trains> trainList;
-    //list for all the bike data
-    List<Bikes> bikeList;
     //constant string to hold the url to where the images are stored on localhost
     //one for testing on my pc and laptop
     private static final String PHOTOS_BASE_URL = "http://10.0.2.2:80/planes-trains-automobiles/img/";
@@ -137,8 +118,8 @@ public class MainActivity extends ListActivity {
 //            return content;
 //            loop through each train object do a network reuqest for each image
 //            store each of the phots in a bitmap var in the train obeject
-            for (Trains train : trainList){
-                try{
+            for (Trains train : trainList) {
+                try {
                     String imgUrl = PHOTOS_BASE_URL + train.getTrainImg();
                     InputStream in = (InputStream) new URL(imgUrl).getContent();
                     Bitmap bitmap = BitmapFactory.decodeStream(in);
@@ -148,50 +129,7 @@ public class MainActivity extends ListActivity {
                     e.printStackTrace();
                 }
             }
-
-            //for JSON
-            HttpManager sh = new HttpManager();
-            //make the request to the api url
-            String jsonStr = sh.callApi(jURL);
-            //log the response
-            Log.e(TAG, "Response from url: " + jsonStr);
-            if (jsonStr != null){
-                try{
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-                    //Get the JSON ARRAY NODE
-                    JSONArray bikes = jsonObj.getJSONArray("stations");
-                    for (int i = 0; i < bikes.length(); i++){
-                        JSONObject b = bikes.getJSONObject(i);
-
-                        String name = b.getString("name");
-                        String availb = b.getString("available_bikes");
-                        String status = b.getString("status");
-
-                        // tmp hash map for single contact
-                        HashMap<String, String> bike = new HashMap<>();
-                        bikeList.add(bike);
-                    }
-                } catch (final JSONException e) {
-                    e.printStackTrace();
-                }
-            }else {
-                Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
-            }
-                return null;
-            
-
-            //now we return the trainlist not just content, so the whole array of objects
             return trainList;
-
         }
 
 

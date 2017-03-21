@@ -6,4 +6,8 @@
         android:title="@string/doo_doo"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item android:id="@+id/json"
+        android:title="json"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 </menu>

@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.goose_pb.outofsync.model.Trains;
+import com.example.goose_pb.outofsync.parser.TrainsJSONParser;
 import com.example.goose_pb.outofsync.parser.TrainsXMLParser;
 
 
@@ -33,7 +35,7 @@ public class MainActivity extends ListActivity {
     List<Trains> trainList;
     //constant string to hold the url to where the images are stored on localhost
     //one for testing on my pc and laptop
-    private static final String PHOTOS_BASE_URL = "http://10.0.2.2:80/planes-trains-automobiles/img/";
+    private static final String PHOTOS_BASE_URL = "http://10.0.2.2:8888/planes-trains-automobiles/img/";
 //    private static final String PHOTOS_BASE_URL = "http://10.0.2.2:8888/planes-trains-automobiles/img/";
     //URL for JSON
     private static String jURL = "https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=ec447add626cfb0869dd4747a7e50e21d39d1850";
@@ -60,7 +62,8 @@ public class MainActivity extends ListActivity {
 
 //        requestData("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
         //one for testing on my pc and laptop
-        requestData("http://10.0.2.2:80/planes-trains-automobiles/pta.xml");
+//        requestData("http://10.0.2.2:80/planes-trains-automobiles/pta.xml");
+        requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.json");
 //        requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
 
     }
@@ -80,7 +83,8 @@ public class MainActivity extends ListActivity {
     public void getData(View v) {
 //        requestData("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
         //one for testing on my pc and laptop
-        requestData("http://10.0.2.2:80/planes-trains-automobiles/pta.xml");
+//        requestData("http://10.0.2.2:80/planes-trains-automobiles/pta.xml");
+        requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.json");
 //        requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
     }
 
@@ -114,7 +118,7 @@ public class MainActivity extends ListActivity {
             // getData should return a string of XML (the URI above request xml)
             String content = HttpManager.getData(params[0]);
 //            return content;
-            trainList = TrainsXMLParser.parseFeed(content);
+            trainList = TrainsJSONParser.parseFeed(content);
 //            return content;
 //            loop through each train object do a network reuqest for each image
 //            store each of the phots in a bitmap var in the train obeject
@@ -135,7 +139,9 @@ public class MainActivity extends ListActivity {
 
 //        @Override
         protected void onPostExecute(List<Trains> train) {
-
+            for (Trains trains : trainList) {
+                Log.i("Train", trains.toString());
+            }
             // pass result that was received from doInBackground() into the Parser
         //    trainList = TrainsXMLParser.parseFeed(s);
             updateDisplay();
@@ -171,10 +177,11 @@ public class MainActivity extends ListActivity {
 ////            syncup.execute("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
 //
 //            nsyncs.add(syncup);
-//            requestData("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
+//            requestData("http://api.irishrail.ie/retime/realtime.asmx/getCurrentTrainsXML");al
             //one for testing on my pc and laptop
-            requestData("http://10.0.2.2:80/planes-trains-automobiles/pta.xml");
+//            requestData("http://10.0.2.2:80/planes-trains-automobiles/pta.xml");
 //            requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
+            requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.json");
         }
 
         return false;

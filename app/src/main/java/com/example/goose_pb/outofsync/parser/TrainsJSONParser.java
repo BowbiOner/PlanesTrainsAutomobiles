@@ -31,26 +31,35 @@ import static android.content.ContentValues.TAG;
 
 public class TrainsJSONParser {
 
-    public static List<Trains> parseFeed(String content) throws JSONException {
+    public static List<Trains> parseFeed(String content) {
+        try {
+            JSONArray jArray = new JSONArray(content);
+            List<Trains> trainList = new ArrayList<>();
 
+            for (int i = 0; i < jArray.length(); i++){
+                JSONObject jObj = jArray.getJSONObject(i);
+                Trains train = new Trains();
 
-        JSONArray jArray = new JSONArray(content);
+                train.setTrainStatus(jObj.getString("TrainStatus"));
+                train.setTrainLat((jObj.getDouble("TrainLatitude")));
+                train.setTrainLng((jObj.getDouble("TrainLongitude")));
+                train.setTrainCode(jObj.getString("TrainCode"));
+                train.setTrainDate((jObj.getString("TrainDate")));
+                train.setPubMsg((jObj.getString("PublicMessage")));
+                train.setDirectionD(jObj.getString("Direction"));
+                train.setTrainImg(jObj.getString("Photo"));
+                //add the train object to the list - add the current train object
+                trainList.add(train);
+            }
 
-        List<Trains> trainList = new ArrayList<>();
-
-        for (int i = 0; i < jArray.length(); i++){
-            JSONObject jObj = jArray.getJSONObject(i);
-            Trains train = new Trains();
-
-            train.setTrainStatus(jObj.getString("TrainStatus"));
-            train.setTrainLat((jObj.getDouble("TrainLatitude")));
-            train.setTrainLng((jObj.getDouble("TrainLongitude")));
-            train.setTrainCode(jObj.getString("TrainCode"));
-            train.setTrainDate((jObj.getString("TrainDate")));
-            train.setPubMsg((jObj.getString("PublicMessage")));
-            train.setDirectionD(jObj.getString("Direction"));
-            train.setTrainImg(jObj.getString("Photo"));
+            return trainList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
+
+
+
 
     }
 }

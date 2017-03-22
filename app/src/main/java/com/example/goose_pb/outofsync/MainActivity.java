@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,11 +27,13 @@ import com.example.goose_pb.outofsync.parser.TrainsJSONParser;
 import com.example.goose_pb.outofsync.parser.TrainsXMLParser;
 
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends ListActivity implements View.OnClickListener{
     TextView do_task;
     ListView bikeLV;
     ProgressBar pb;
     List<NSync> nsyncs;
+    Button json_btn;
+    Button xml_btn;
     // We will now retrieve a list of Flowers rather than raw XML
     List<Trains> trainList;
     //constant string to hold the url to where the images are stored on localhost
@@ -44,12 +47,12 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.startup_layout);
         //create an instance of the toolbaer
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar myTools = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(myTools);
         //set the visibility of the above toolbar to visible
-        toolbar.setVisibility(View.VISIBLE);
-        //setSupportActionBar(toolbar);
+        myTools.setVisibility(View.VISIBLE);
         //create a progress bar and get it by the id defined in the conent_main.xml
         pb = (ProgressBar) findViewById(R.id.pb);
         //set the visiblity of the progress bar to being visible
@@ -60,6 +63,12 @@ public class MainActivity extends ListActivity {
         // the application will add and remove AsyncTasks from this list
         nsyncs = new ArrayList<>();
 
+        Button xml_btn = (Button) findViewById(R.id.btn_xml);
+        xml_btn.setOnClickListener(this);
+
+        Button json_btn = (Button) findViewById(R.id.btn_json);
+        json_btn.setOnClickListener(this);
+
 //        requestData("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
         //one for testing on my pc and laptop
 //        requestData("http://10.0.2.2:80/planes-trains-automobiles/pta.xml");
@@ -67,6 +76,7 @@ public class MainActivity extends ListActivity {
 //        requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,6 +106,25 @@ public class MainActivity extends ListActivity {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.btn_xml:
+                // do your code
+                requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
+                break;
+
+            case R.id.btn_json:
+                // do your code
+                requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.json");
+                break;
+
+            default:
+                break;
         }
     }
 
@@ -170,6 +199,20 @@ public class MainActivity extends ListActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+//            NSync syncup = new NSync();
+////            //link for live data
+//            syncup.execute("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");
+//            //link for static data so i can add images
+////            syncup.execute("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
+//
+//            nsyncs.add(syncup);
+//            requestData("http://api.irishrail.ie/retime/realtime.asmx/getCurrentTrainsXML");al
+            //one for testing on my pc and laptop
+//            requestData("http://10.0.2.2:80/planes-trains-automobiles/pta.xml");
+            requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.xml");
+//            requestData("http://10.0.2.2:8888/planes-trains-automobiles/pta.json");
+        }
+        if (id == R.id.json) {
 //            NSync syncup = new NSync();
 ////            //link for live data
 //            syncup.execute("http://api.irishrail.ie/realtime/realtime.asmx/getCurrentTrainsXML");

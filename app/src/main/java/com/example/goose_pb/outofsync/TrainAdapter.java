@@ -2,6 +2,7 @@ package com.example.goose_pb.outofsync;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class TrainAdapter extends ArrayAdapter<Trains> {
 
         ImageView iv = (ImageView) view.findViewById(R.id.trainImage);
         iv.setImageBitmap(trains.getBitmap());
+//        iv.setImageURI(Uri.parse(trains.getTrainImg()));
 
         return view;
     }

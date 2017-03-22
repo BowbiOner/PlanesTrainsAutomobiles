@@ -33,11 +33,12 @@ public class TrainsJSONParser {
 
     public static List<Trains> parseFeed(String content) {
         try {
-            JSONArray jArray = new JSONArray(content);
+            JSONObject jArray = new JSONObject(content);
+            JSONArray jsonArray = jArray.getJSONArray("objTrainPositions");
             List<Trains> trainList = new ArrayList<>();
 
-            for (int i = 0; i < jArray.length(); i++){
-                JSONObject jObj = jArray.getJSONObject(i);
+            for (int i = 0; i < jsonArray.length(); i++){
+                JSONObject jObj = jsonArray.getJSONObject(i);
                 Trains train = new Trains();
 
                 train.setTrainStatus(jObj.getString("TrainStatus"));

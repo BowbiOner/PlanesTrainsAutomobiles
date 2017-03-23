@@ -47,7 +47,7 @@ public class MainActivity extends ListActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.startup_layout);
+        setContentView(R.layout.activity_main);
         //create an instance of the toolbaer
         Toolbar myTools = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(myTools);
